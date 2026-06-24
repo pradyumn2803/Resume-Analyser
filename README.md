@@ -45,7 +45,7 @@ pip install -r requirements.txt
 Create a `.env` file:
 
 ```env
-DATABASE_URL=postgresql://username:password@localhost:5432/resume_analyser
+DATABASE_URL=postgresql://username:password@localhost:port/database_name
 ```
 
 ### Run Application
