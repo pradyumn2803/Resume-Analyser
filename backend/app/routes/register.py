@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.service.registerUser import register_user
+from app.service.registerUser import RegisterService
 register_bp = Blueprint('register',__name__,url_prefix='/auth')
 
 @register_bp.post('/register')
@@ -9,6 +9,6 @@ def register():
     email = response.get('email')
     password = response.get('password')
 
-    data,status_code = register_user(name, email, password)
+    data,status_code = RegisterService.register_user(name, email, password)
 
     return jsonify(data), status_code
