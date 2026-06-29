@@ -1,5 +1,7 @@
+from datetime import timedelta
+
 from flask import Blueprint,Flask
-from app.extensions import db
+from app.extensions import db, jwt
 from dotenv import load_dotenv
 import os
 
@@ -12,6 +14,10 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES')))
+    jwt.init_app(app)
+
     from app.routes.health import health_bp
     app.register_blueprint(health_bp)
 
@@ -23,5 +29,8 @@ def create_app():
 
     from app.routes.login import login_bp
     app.register_blueprint(login_bp) 
+
+    from app.routes.profile import profile_bp
+    app.register_blueprint(profile_bp)
 
     return app

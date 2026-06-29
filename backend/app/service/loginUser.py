@@ -1,5 +1,6 @@
 from app.models.user import User
 from werkzeug.security import check_password_hash
+from flask_jwt_extended import create_access_token
 class LoginService:
 
     @staticmethod
@@ -15,11 +16,14 @@ class LoginService:
         if not user or not check_password_hash(user.password,password):
             return {"message": "Invalid user or password", "status": "error"}, 401
         
+        access_token = create_access_token(identity=str(user.id))
+        
         return {
                 "message": "Login successful", 
                 "user": {
                         "id": user.id,
                         "name":user.name,
                         "email":user.email   
-                        }
+                        },
+                "access_token": access_token
                 }, 200
