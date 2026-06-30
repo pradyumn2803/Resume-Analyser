@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from flask import Blueprint,Flask
+from flask import Flask
 from app.extensions import db, jwt
 from dotenv import load_dotenv
 import os
