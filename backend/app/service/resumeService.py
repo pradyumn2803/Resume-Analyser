@@ -46,7 +46,7 @@ class ResumeService:
             
             resume = ResumeService.save_resume_to_db(user_id, file_path, filename, file, file_size)
 
-            return {"message": "File uploaded successfully","id": resume.id}, 200
+            return {"message": "File uploaded successfully","id": resume.id}, 201
         except Exception as e:
             db.session.rollback()
             FileUtils.delete_file(file_path)  # Attempt to delete the file if saving fails
