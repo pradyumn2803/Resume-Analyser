@@ -2,6 +2,9 @@ from flask import jsonify
 from app.models.user import User
 from app.extensions import db
 from werkzeug.security import generate_password_hash
+import logging
+
+logger = logging.getLogger(__name__)
 
 class RegisterService:
 
@@ -31,4 +34,5 @@ class RegisterService:
             },201
         except Exception as e:
             db.session.rollback()
+            logger.exception(f"Error occurred while registering user: {e}")
             return {"message": "An error occurred while registering the user"}, 500

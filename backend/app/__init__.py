@@ -7,6 +7,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    from app.logging_config import logging
+    logging.basicConfig(level=logging.INFO)
+
     db.init_app(app)
     jwt.init_app(app)
 
