@@ -1,21 +1,13 @@
-from datetime import timedelta
-
 from flask import Flask
 from app.extensions import db, jwt
-from dotenv import load_dotenv
-import os
+from app.config import Config
 
-load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
-
-    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES')))
     jwt.init_app(app)
 
     from app.routes.health import health_bp
