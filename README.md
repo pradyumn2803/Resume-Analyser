@@ -48,6 +48,8 @@ Create a `.env` file:
 DATABASE_URL=postgresql://username:password@localhost:port/database_name
 JWT_SECRET_KEY = your_key
 JWT_ACCESS_TOKEN_EXPIRES = 15 #15minutes
+UPLOAD_FOLDER=uploads
+MAX_CONTENT_LENGTH=5242880  # 5MB
 ```
 
 ### Run Application
