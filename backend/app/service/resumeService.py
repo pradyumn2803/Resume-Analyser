@@ -3,7 +3,12 @@ import os
 from app.models.resume import Resume
 from app.extensions import db
 
+
 class ResumeService:
+    valid_file_types = {'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}
+    valid_extensions = {'.pdf', '.doc', '.docx'}
+
+    @staticmethod
     def delete_file(file_path):
         """Delete a file from the filesystem."""
         try:
@@ -18,20 +23,20 @@ class ResumeService:
             return {"message": "No file provided"}, 400
         
         # to check if the file is empty
-        if file.filename == '':
+        if not file.filename.strip():
             return {"message": "No file selected"}, 400
         
-        if not file.filename.lower().endswith('.pdf'):
-            return {"message": "Invalid file type. Only PDF files are allowed"}, 400
+        extension = os.path.splitext(file.filename)[1].lower()
+        if extension not in ResumeService.valid_extensions:
+            return {"message": "Invalid file type. Only PDF, DOC, and DOCX files are allowed"}, 400
 
-        # check if the file type is PDF
-        if file.mimetype != "application/pdf":
-            return {"message": "Invalid file type. Only PDF files are allowed"}, 400
+        # check if the file type is in the list of valid types
+        if file.mimetype not in ResumeService.valid_file_types:
+            return {"message": "Invalid file type. Only PDF, DOC, and DOCX files are allowed"}, 400
         
         # Generate a unique filename for the uploaded file
-        # extention = file.filename.split('.')[-1].lower() or
-        extention = os.path.splitext(file.filename)[1].lower()
-        filename = f"{str(uuid.uuid4())}{extention}" 
+        # extension = file.filename.split('.')[-1].lower() or
+        filename = f"{str(uuid.uuid4())}{extension}" 
         
         # before saving
         # file.seek(0, os.SEEK_END)
@@ -62,10 +67,10 @@ class ResumeService:
         except Exception as e:
             ResumeService.delete_file(file_path)  # Delete the file if an error occurs
             db.session.rollback()  # Rollback the session in case of an error
-            # return {
-            #     "message": "An error occurred while saving the file",
-            # }, 500
-            raise e
+            return {
+                "message": "An error occurred while saving the file",
+            }, 500
+            # raise e
         
 
 
