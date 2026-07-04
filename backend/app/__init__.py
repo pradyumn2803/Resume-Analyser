@@ -10,6 +10,9 @@ def create_app():
     from app.logging_config import logging
     logging.basicConfig(level=logging.INFO)
 
+    from app.error_handlers import register_error_handlers
+    register_error_handlers(app)   
+
     db.init_app(app)
     jwt.init_app(app)
 

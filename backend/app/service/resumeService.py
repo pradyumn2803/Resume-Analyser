@@ -19,6 +19,7 @@ class ResumeService:
     @staticmethod
     def upload_resume(user_id,file):
         # Validate the file
+        logger.info(f"Validating resume for user_id: {user_id}, file: {file.filename}")
         validation_error = Validators.validate_resume(file)
 
         if validation_error:
@@ -45,10 +46,10 @@ class ResumeService:
                 return {"message": "File size exceeds the limit of 5MB"}, 400
             
             resume = ResumeService.save_resume_to_db(user_id, file_path, filename, file, file_size)
-
+            logger.info(f"Resume uploaded successfully for user_id: {user_id}, resume_id: {resume.id}")
             return {"message": "File uploaded successfully","id": resume.id}, 201
-        except Exception as e:
+        except Exception:
             db.session.rollback()
             FileUtils.delete_file(file_path)  # Attempt to delete the file if saving fails
-            logger.exception(f"Error saving resume to database: {e}")
-            return {"message": "An error occurred while saving the file"}, 500
+            logger.exception(f"Error saving resume to database")
+            raise 

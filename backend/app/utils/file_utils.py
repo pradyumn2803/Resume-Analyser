@@ -13,7 +13,8 @@ class FileUtils:
     @staticmethod
     def delete_file(file_path):
         """Delete a file from the filesystem."""
-        
+        if not file_path:
+            return
         if os.path.exists(file_path):
             os.remove(file_path)
         
