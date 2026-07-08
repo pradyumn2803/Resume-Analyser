@@ -1,17 +1,23 @@
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 class TextCleaningService:
 
     @staticmethod
     def clean_text(text):
-        text = TextCleaningService._normalize_newlines(text)
-        text = TextCleaningService._replace_tabs(text)
-        text = TextCleaningService._remove_extra_spaces(text)
-        text = TextCleaningService._remove_extra_blank_lines(text)
-        text = TextCleaningService._remove_non_printable_characters(text)
+            logger.info("Started cleaning extracted text")
+            
+            text = TextCleaningService._normalize_newlines(text)
+            text = TextCleaningService._replace_tabs(text)
+            text = TextCleaningService._remove_extra_spaces(text)
+            text = TextCleaningService._remove_extra_blank_lines(text)
+            text = TextCleaningService._remove_non_printable_characters(text)
 
-        return text.strip()
-
+            logger.info("Cleaning text..")
+            
+            return text.strip()
     @staticmethod
     def _normalize_newlines(text):
         text = text.replace("\r\n","\n")
