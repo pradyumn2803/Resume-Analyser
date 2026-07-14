@@ -11,3 +11,4 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', 15)))
     MAX_FILE_SIZE = int(os.getenv('MAX_FILE_SIZE', 5242880))  # Default to 5MB if not set
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')  # Default to 'uploads' if not set
+    PROMPT_FOLDER = os.getenv('PROMPT_FOLDER','prompt')

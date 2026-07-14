@@ -15,7 +15,7 @@ class TextCleaningService:
             text = TextCleaningService._remove_extra_blank_lines(text)
             text = TextCleaningService._remove_non_printable_characters(text)
 
-            logger.info("Cleaning text..")
+            logger.info("Successfully cleaned text")
             
             return text.strip()
     @staticmethod

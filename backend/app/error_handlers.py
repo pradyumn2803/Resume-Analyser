@@ -1,6 +1,8 @@
 from flask import jsonify
 import logging
 from app.exceptions.filetypeExceptions import UnsupportedFileTypeError, TextExtractionError
+from app.exceptions.promptExceptions import PromptTemplateError
+from app.exceptions.llmExceptions import LLMError
 logger = logging.getLogger(__name__)
 
 def register_error_handlers(app):
@@ -34,3 +36,23 @@ def register_error_handlers(app):
                 "message": f"Failed to extract text: {e}"
             }
         ), 400
+    
+    @app.errorhandler(PromptTemplateError)
+    def handle_prompt_template_error(e):
+        logger.warning(f"COuld not find prompt template: {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
+    
+    @app.errorhandler(LLMError)
+    def handle_llm_error(e):
+        logger.warning(f"LLM error: {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
