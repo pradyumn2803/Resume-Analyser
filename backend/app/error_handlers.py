@@ -2,7 +2,7 @@ from flask import jsonify
 import logging
 from app.exceptions.filetypeExceptions import UnsupportedFileTypeError, TextExtractionError
 from app.exceptions.promptExceptions import PromptTemplateError
-from app.exceptions.llmExceptions import LLMError
+from app.exceptions.llmExceptions import LLMError, JSONDecodeError
 logger = logging.getLogger(__name__)
 
 def register_error_handlers(app):
@@ -50,6 +50,16 @@ def register_error_handlers(app):
     @app.errorhandler(LLMError)
     def handle_llm_error(e):
         logger.warning(f"LLM error: {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
+    
+    @app.errorhandler(JSONDecodeError)
+    def handle_JSONError(e):
+        logger.warning(f"JSON Decode Error {e}")
 
         return jsonify(
             {

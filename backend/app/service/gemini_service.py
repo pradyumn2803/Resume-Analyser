@@ -1,7 +1,9 @@
 from app.config import Config
 import google.generativeai as genai
 import logging
-from app.exceptions.llmExceptions import LLMError
+from app.exceptions.llmExceptions import LLMError, JSONDecodeError
+import re
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -44,12 +46,46 @@ class GeminiService:
 
     @staticmethod
     def _clean_response(response):
-        pass
+        response = re.sub(
+            r"^```(?:json)?\s*",
+            "",
+            response
+        )
+
+        response = re.sub(
+            r"\s*```$",
+            "",
+            response
+        )
+
+        return response.strip()
 
     @staticmethod
     def _parse_json(response):
-        pass
+        logger.info("Parsing the response")
+        try:
+            response = json.loads(response)
+            logger.info("Successfully parsed the response")
+            return response
+        except JSONDecodeError as e:
+            logger.exception("Failed to parse resume")
 
+            raise LLMError(
+                f"Invalid json returned by Gemini {e}"
+            )
     @staticmethod
     def _validate_response(response):
-        pass
+        required_fields = [
+            "ats_score",
+            "summary",
+            "strengths",
+            "weaknesses",
+            "missing_skills",
+            "suggestions"
+        ]
+
+        for field in required_fields:
+            if field not in response:
+                raise LLMError(
+                    f"Missing required field {field}"
+                )

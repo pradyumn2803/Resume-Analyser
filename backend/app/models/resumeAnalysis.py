@@ -17,7 +17,7 @@ class ResumeAnalysis(db.Model):
     analyzed_at = db.Column(db.DateTime,nullable=True)
     error_message = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime,default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime,default=datetime.utcnow,on_change=datetime.utcnow)
+    updated_at = db.Column(db.DateTime,default=datetime.utcnow,onupdate=datetime.utcnow)
     resume = db.relationship('Resume', back_populates='analysis')
 
     def __init__(self,resume_id,extracted_text,cleaned_text,ats_score,suggestions,llm_response,analysis_status=AnalysisStatus.PENDING,analyzed_at=None,error_message=None):
