@@ -28,3 +28,16 @@ class AnalysisRepository:
         return ResumeAnalysis.query.filter_by(
             resume_id=resume_id
         ).first()
+    
+    @staticmethod
+    def fetch_analysis(resume_id):
+        return (
+            ResumeAnalysis.query.filter_by(resume_id=resume_id).first()
+        )
+    
+    @staticmethod
+    def fetch_resume(resume_id,user_id):
+        return ResumeAnalysis.query.filter_by(
+            resume_id=resume_id,
+            user_id=user_id
+        ).first()

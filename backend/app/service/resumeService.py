@@ -4,6 +4,7 @@ from app.utils.file_utils import FileUtils
 from app.utils.validators import Validators
 from app.config import Config
 import logging
+from app.repository.analysisRepo import AnalysisRepository
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +54,48 @@ class ResumeService:
             FileUtils.delete_file(file_path)  # Attempt to delete the file if saving fails
             logger.exception(f"Error saving resume to database")
             raise 
+
+    @staticmethod
+    def fetch_analysis(resume_id,user_id):
+        resume = AnalysisRepository.fetch_resume(resume_id,user_id)
+
+        if not resume:
+            return {
+                "message": "No Resume Found. Please upload it again",
+                "analysis": response
+            }, 404        
+
+        if resume.user_id != user_id:
+            return {
+                "message": "Unauthorized",
+                "analysis": response
+            }, 403 
+
+        analysis = AnalysisRepository.fetch_analysis(resume_id)
+        response = []
+
+        if not analysis:
+            return {
+                "message": "No Analysis Found",
+                "analysis": response
+            }, 404
+        
+        llm_response = analysis.llm_response or {}
+        
+        response.append({
+            "resume_id": analysis.resume_id,
+            "status": analysis.analysis_status,
+            "ats_score": analysis.ats_score,
+            "suggestions": analysis.suggestions,
+            "llm_response": {
+                "summary": llm_response.get("summary",[]),
+                "strengths": llm_response.get("strengths",[]),
+                "weaknesses": llm_response.get("weaknesses",[]),
+                "missing_skills": llm_response.get("missing_skills",[]),
+            }
+        })
+
+        return {
+            "message": "Resume analysis Fetched Successfully",
+            "analysis": response
+        }, 200
