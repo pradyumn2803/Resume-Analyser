@@ -25,14 +25,10 @@ class AnalysisService:
         resume = ResumeRepo.fetch_resume(resume_id)
 
         if not resume:
-            return{
-                "message": "Resume not Found"
-            }, 404
+            raise ValueError("Resume not Found")
         
         if(resume.user_id!=user_id):
-            return{
-                "message": "Unauthorized"
-            }, 403
+            raise PermissionError("Unauthorized Access")
 
         
         analysis = AnalysisRepository.fetch(resume_id)
@@ -69,10 +65,7 @@ class AnalysisService:
             analysis = AnalysisRepository.update(analysis)
             logger.info(f"Analysis done for resume{resume.id}")
         
-            return {
-                "message": "Analysis completed successfully",
-                "analysis_id": analysis.id
-            }, 200
+            logger.info(f"Analysis Finished for resume {resume.id}")
         
         except Exception as e:
             analysis.analysis_status = AnalysisStatus.FAILED

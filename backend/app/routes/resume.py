@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, render_template, request
 from flask_jwt_extended import jwt_required,get_jwt_identity
 from app.service.resumeService import ResumeService
 from app.service.analysis import AnalysisService
+from app.queue.queue import analysis_queue
+from rq import Retry
 
 resume_bp = Blueprint('resume',__name__, url_prefix='/resume')
 
@@ -28,9 +30,20 @@ def fetch_resume_analysis(resume_id):
 @jwt_required()
 def analyze_resume(resume_id):
     user_id = int(get_jwt_identity())
-    response, status_code = AnalysisService.analyze_resume(resume_id,user_id)
+    job = analysis_queue.enqueue(
+        AnalysisService.analyze_resume,
+        resume_id,
+        user_id,
+        job_timeout=300,
+        retry = Retry(max=3,interval=[10,30,60]),
+    )
 
-    return jsonify(response), status_code
+
+    return jsonify({
+        "message": "Analysis enqueued successfully",
+        "job_id": job.id,
+        "status":"PENDING"
+    }), 202
 
 @resume_bp.get('/get-all-resume')
 @jwt_required()

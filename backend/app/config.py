@@ -14,3 +14,6 @@ class Config:
     PROMPT_FOLDER = os.getenv('PROMPT_FOLDER','prompt')
     GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
     GEMINI_MODEL = os.getenv("GEMINI_MODEL","gemini-2.5-flash-lite")
+    REDIS_HOST = os.getenv("REDIS_HOST")
+    REDIS_PORT = os.getenv("REDIS_PORT")
+    REDIS_DB = os.getenv("REDIS_DB")
