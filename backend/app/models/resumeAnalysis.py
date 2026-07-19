@@ -20,14 +20,4 @@ class ResumeAnalysis(db.Model):
     updated_at = db.Column(db.DateTime,default=datetime.utcnow,onupdate=datetime.utcnow)
     resume = db.relationship('Resume', back_populates='analysis')
 
-    def __init__(self,resume_id,extracted_text,cleaned_text,ats_score,suggestions,llm_response,analysis_status=AnalysisStatus.PENDING,analyzed_at=None,error_message=None):
-        self.resume_id = resume_id
-        self.extracted_text = extracted_text
-        self.cleaned_text = cleaned_text
-        self.ats_score = ats_score
-        self.suggestions = suggestions
-        self.llm_response = llm_response
-        self.analysis_status = analysis_status
-        self.analyzed_at = analyzed_at
-        self.error_message=error_message
 

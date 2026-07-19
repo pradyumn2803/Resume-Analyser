@@ -13,4 +13,4 @@ class Config:
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')  # Default to 'uploads' if not set
     PROMPT_FOLDER = os.getenv('PROMPT_FOLDER','prompt')
     GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-    GEMINI_MODEL = os.getenv("GEMINI_MODEL","gemini-2.5-flash")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL","gemini-2.5-flash-lite")

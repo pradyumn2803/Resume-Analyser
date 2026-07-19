@@ -1,5 +1,6 @@
 from app.extensions import db
 from app.models.resumeAnalysis import ResumeAnalysis
+from app.models.resume import Resume
 from app.constants.constants import AnalysisStatus
 class AnalysisRepository:
     @staticmethod
@@ -37,9 +38,9 @@ class AnalysisRepository:
     
     @staticmethod
     def fetch_resume(resume_id,user_id):
-        return ResumeAnalysis.query.filter_by(
-            resume_id=resume_id,
-            user_id=user_id
+        return Resume.query.filter_by(
+            id=resume_id,
+            user_id = user_id
         ).first()
     
     @staticmethod

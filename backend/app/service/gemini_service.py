@@ -1,5 +1,5 @@
 from app.config import Config
-import google.generativeai as genai
+import google.genai as genai
 import logging
 from app.exceptions.llmExceptions import LLMError, JSONDecodeError
 import re
@@ -7,13 +7,10 @@ import json
 
 logger = logging.getLogger(__name__)
 
-genai.configure(
+client = genai.Client(
     api_key=Config.GEMINI_API_KEY
 )
 
-model = genai.GenerativeModel(
-    Config.GEMINI_MODEL
-)
 
 class GeminiService:
 
@@ -31,8 +28,9 @@ class GeminiService:
     def _call_model(prompt):
         logger.info("Calling Gemini Model..")
         try:
-            response = model.generate_content(
-                prompt
+            response = client.models.generate_content(
+                model = Config.GEMINI_MODEL,
+                contents = prompt
             )
 
             logger.info("Received Response from Gemini")
