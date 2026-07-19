@@ -5,6 +5,7 @@ from app.utils.validators import Validators
 from app.config import Config
 import logging
 from app.repository.analysisRepo import AnalysisRepository
+from app.repository.resumeRepo import ResumeRepo
 
 logger = logging.getLogger(__name__)
 
@@ -99,3 +100,52 @@ class ResumeService:
             "message": "Resume analysis Fetched Successfully",
             "analysis": response
         }, 200
+    
+    @staticmethod
+    def fetch_resume(user_id):
+        resumes = ResumeRepo.fetch_all_resume(user_id=user_id)
+
+        response = []
+
+        for resume in resumes:
+            response.append({
+                "id": resume.id,
+                "name": resume.original_name,
+                "file_size": resume.file_size,
+                "file_type": resume.file_type,
+                "uploaded_at": resume.uploaded_at
+            })
+
+        return {
+            "message": "Resume details fetched successfully",
+            "resume": response
+        },200
+    
+    @staticmethod
+    def delete_resume(user_id,resume_id):
+        resume = ResumeRepo.fetch_resume(resume_id=resume_id)
+
+        if not resume:
+            return{
+                "message":"Resume not found"
+            }, 404
+        
+        if resume.user_id != user_id:
+            return{
+                "message":"Unauthorized access"
+            }, 403
+        
+        try:
+            FileUtils.delete_file(resume.file_path)
+            ResumeRepo.delete_resume(resume=resume)
+
+            return{
+                "message":"Resume deleted successfully",
+                "id": resume.id
+            }, 200
+        
+        except Exception as e:
+            ResumeRepo.rollback()
+            return{
+                "message":"Failed to Delete Resume"
+            }, 500

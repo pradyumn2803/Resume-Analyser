@@ -32,3 +32,19 @@ def analyze_resume(resume_id):
 
     return jsonify(response), status_code
 
+@resume_bp.get('/get-all-resume')
+@jwt_required()
+def fetch_resumes():
+    user_id = int(get_jwt_identity())
+
+    response,status = ResumeService.fetch_resume(user_id)
+    return jsonify(response), status
+
+@resume_bp.delete('/delete-resume/<int:resume_id>')
+@jwt_required()
+def delete_resume(resume_id):
+    user_id = int(get_jwt_identity())
+
+    response, status = ResumeService.delete_resume(user_id=user_id,resume_id=resume_id)
+
+    return jsonify(response), status
