@@ -3,8 +3,8 @@ from app.models.resumeAnalysis import ResumeAnalysis
 from app.constants.constants import AnalysisStatus
 class AnalysisRepository:
     @staticmethod
-    def create_pending_analysis(resume_id):
-        analysis= ResumeAnalysis(resume_id=resume_id,analysis_status=AnalysisStatus.PENDING)
+    def create_analysis(resume_id):
+        analysis= ResumeAnalysis(resume_id=resume_id,analysis_status=AnalysisStatus.PROCESSING)
         return AnalysisRepository.create(analysis)
 
     @staticmethod
@@ -41,3 +41,7 @@ class AnalysisRepository:
             resume_id=resume_id,
             user_id=user_id
         ).first()
+    
+    @staticmethod
+    def rollback():
+        db.session.rollback()

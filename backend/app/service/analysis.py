@@ -11,7 +11,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 class AnalysisService:
-
+    @staticmethod
+    def delete_analysis(analysis):
+        try:
+            if analysis:
+                AnalysisRepository.delete(analysis=analysis)
+        except Exception as e:
+            AnalysisRepository.rollback()
+            raise
+    
     @staticmethod
     def analyze_resume(resume_id,user_id):
         resume = ResumeRepo.fetch_resume(resume_id)
@@ -30,26 +38,22 @@ class AnalysisService:
         analysis = AnalysisRepository.fetch(resume_id)
 
         if analysis:
-            return {
-                "message": "Analysis already present"
-            }, 409
+            AnalysisService.delete_analysis(analysis)
+
         logger.info(f"started analysis for resume{resume.id}")
        
-        analysis = AnalysisRepository.create_pending_analysis(resume.id)
+        analysis = AnalysisRepository.create_analysis(resume.id)
         logger.info(f"created analysis for resume{analysis.id}")
         
-        analysis.analysis_status=AnalysisStatus.PROCESSING
-        analysis=AnalysisRepository.update(analysis)
 
         try:
             logger.info(f"started Text extraction for resume{resume.id}")
             text = TextExtractionService.extract_text(resume.file_path)
             analysis.extracted_text = text
+            analysis=AnalysisRepository.update(analysis)
 
             cleaned_text = TextCleaningService.clean_text(text)
             analysis.cleaned_text = cleaned_text
-
-
             analysis=AnalysisRepository.update(analysis)
 
             prompt = PromptBuilder.build_resume_analysis_prompt(cleaned_text)
@@ -73,7 +77,7 @@ class AnalysisService:
         except Exception as e:
             analysis.analysis_status = AnalysisStatus.FAILED
             analysis.analyzed_at = datetime.utcnow()
-            analysis.error_message = f"Failed to analyse the file {e}"
+            analysis.error_message = f"Failed to analyze the file {e}"
             analysis=AnalysisRepository.update(analysis)
             logger.exception(f"Analysis failed for resume{resume.id}")
             raise 
