@@ -1,5 +1,12 @@
+import Header from "./components/layout/Header";
+
 function App() {
-  return <h1 className="text-6xl">AI Resume Analyzer</h1>;
+  return (
+    <>
+    <Header/>
+    <main>An AI Powered Resume </main>
+    </>
+  )
 }
 
 export default App;
