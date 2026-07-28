@@ -1,12 +1,7 @@
-import Header from "./components/layout/Header";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <>
-    <Header/>
-    <main>An AI Powered Resume </main>
-    </>
-  )
+  return <AppRoutes/>;
 }
 
 export default App;
