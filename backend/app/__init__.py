@@ -1,11 +1,15 @@
 from flask import Flask
 from app.extensions import db, jwt
 from app.config import Config
-
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    CORS(
+        app,
+        origins = [app.config.get("FRONTEND_URL")]
+    )
 
     from app.logging_config import logging
     logging.basicConfig(level=logging.INFO)
