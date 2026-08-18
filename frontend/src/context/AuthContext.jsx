@@ -1,5 +1,14 @@
 import { createContext,useState,useContext } from "react";
+import { getAccessToken } from "../utils/auth";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
+export function AuthProvider({ children }) {
+    const [isAuthenticated, setIsAuthenticated] = useState(!!getAccessToken());
+    return(
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+            {children}
+        </AuthContext.Provider>
+    );
+}
 
-export default AuthContext;
+export default AuthProvider;

@@ -7,8 +7,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Hero from "../components/landing/Hero";
 import Navbar from "../components/layout/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -50,6 +53,7 @@ const validateForm = () => {
       setSuccessMessage("");
       setIsLoading(true); 
       const data = await login(formData);
+      setIsAuthenticated(true);
       console.log("User logged In successfully:", data);
       setSuccessMessage("User Logged in successfully!");
       navigate("/dashboard", { state: { message: "Logged In Successfully" } });
