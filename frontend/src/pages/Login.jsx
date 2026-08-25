@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout";
 import Input from "../components/layout/Input";
 import Button from "../components/layout/Button";
-import { login } from "../services/authService";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Hero from "../components/landing/Hero";
@@ -11,7 +10,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { loginUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -52,14 +51,11 @@ const validateForm = () => {
       setErrors({});
       setSuccessMessage("");
       setIsLoading(true); 
-      const data = await login(formData);
-      setIsAuthenticated(true);
-      console.log("User logged In successfully:", data);
+      await loginUser(formData);
       setSuccessMessage("User Logged in successfully!");
-      navigate("/dashboard", { state: { message: "Logged In Successfully" } });
     } catch (error) {
-      console.error("Error loggin user:", error);  
-      setErrors({ apiError: error.response?.data?.message || "An error occurred while registering." });
+      console.error("Error logging in user:", error);  
+      setErrors({ apiError: error.response?.data?.message || "An error occurred while logging in." });
     } finally {
       setIsLoading(false); 
     }
