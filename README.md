@@ -42,17 +42,26 @@ pip install -r requirements.txt
 
 ### Configure Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in backend:
 
 ```env
-DATABASE_URL=postgresql://username:password@localhost:port/database_name
-JWT_SECRET_KEY = your_key
-JWT_ACCESS_TOKEN_EXPIRES = 15 #15minutes
+DATABASE_URL=postgresql://username@localhost:5432/resume_analyser
+
+JWT_SECRET_KEY=change-this-to-a-random-secret
+JWT_ACCESS_TOKEN_EXPIRES=15
+
+MAX_FILE_SIZE=5242880
 UPLOAD_FOLDER=uploads
-MAX_CONTENT_LENGTH=5242880  # 5MB
 PROMPT_FOLDER=app/prompt
-GEMINI_MODEL= 
-GEMINI_API_KEY=
+
+GEMINI_MODEL=gemini-2.5-flash-lite
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+
+FRONTEND_URL=http://localhost:5173
 ```
 
 ### Run Application
