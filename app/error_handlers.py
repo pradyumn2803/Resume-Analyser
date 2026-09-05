@@ -1,0 +1,68 @@
+from flask import jsonify
+import logging
+from app.exceptions.filetypeExceptions import UnsupportedFileTypeError, TextExtractionError
+from app.exceptions.promptExceptions import PromptTemplateError
+from app.exceptions.llmExceptions import LLMError, JSONDecodeError
+logger = logging.getLogger(__name__)
+
+def register_error_handlers(app):
+
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        logger.exception(f"unhandled exception: {e}")
+
+        return jsonify(
+            {
+                "message":"Internal Server Error"
+            }
+        ), 500
+    
+    @app.errorhandler(UnsupportedFileTypeError)
+    def unsupported_file_type_error(e):
+        logger.warning(f"Unsupported file type: {e}")
+
+        return jsonify(
+            {
+                "message": f"Unsupported file type: {e}"
+            }
+        ), 400
+    
+    @app.errorhandler(TextExtractionError)
+    def text_extraction_error(e):
+        logger.warning(f"Failed to extract text: {e}")
+
+        return jsonify(
+            {
+                "message": f"Failed to extract text: {e}"
+            }
+        ), 400
+    
+    @app.errorhandler(PromptTemplateError)
+    def handle_prompt_template_error(e):
+        logger.warning(f"COuld not find prompt template: {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
+    
+    @app.errorhandler(LLMError)
+    def handle_llm_error(e):
+        logger.warning(f"LLM error: {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
+    
+    @app.errorhandler(JSONDecodeError)
+    def handle_JSONError(e):
+        logger.warning(f"JSON Decode Error {e}")
+
+        return jsonify(
+            {
+                "message": str(e)
+            }
+        ), 500
