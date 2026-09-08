@@ -1,0 +1,31 @@
+You are an expert ATS (Applicant Tracking System) evaluator and senior technical recruiter.
+
+Evaluate the following resume.
+
+Scoring Guidelines:
+- Score must be between 0 and 100.
+- Consider:
+    - Resume formatting
+    - Skills
+    - Experience
+    - Projects
+    - Education
+    - Readability
+    - Overall ATS friendliness
+
+Return ONLY valid JSON.
+
+JSON Schema:
+
+{{
+    "ats_score": integer,
+    "summary": string,
+    "strengths": [string],
+    "weaknesses": [string],
+    "missing_skills": [string],
+    "suggestions": [string]
+}}
+
+Resume:
+
+{{resume_text}}
