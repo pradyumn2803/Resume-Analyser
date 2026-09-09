@@ -24,3 +24,8 @@ export const fetchResumeAnalysis = async (resumeId) => {
     const response = await api.get(`/resume/analysis/${resumeId}`);
     return response.data;
 };
+
+export const deleteResume =  async (resumeId) => {
+    const response = await api.delete(`/resume/delete-resume/${resumeId}`)
+    return response.data;
+};

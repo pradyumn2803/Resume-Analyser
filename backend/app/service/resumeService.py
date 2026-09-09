@@ -78,8 +78,9 @@ class ResumeService:
         if not analysis:
             return {
                 "message": "No Analysis Found",
+                "status": "PROCESSING",
                 "analysis": response
-            }, 404
+            }, 200
         
         llm_response = analysis.llm_response or {}
         

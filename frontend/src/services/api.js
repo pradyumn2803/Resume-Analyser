@@ -1,6 +1,6 @@
 import axios from "axios"
 import config  from "../config/config";
-import { getAccessToken } from "../utils/auth";
+import { getAccessToken, removeAccessToken } from "../utils/auth";
 const api = axios.create({
     baseURL: config.apiBaseUrl,
 });
@@ -12,5 +12,18 @@ api.interceptors.request.use((config)=>{
     }
     return config;
 });
+
+api.interceptors.response.use(
+    (response)=> response,
+    (error)=>{
+        if(error.response?.status === 401){
+            removeAccessToken();
+
+            window.location.href = "/";
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export default api;

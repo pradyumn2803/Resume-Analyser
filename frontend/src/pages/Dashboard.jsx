@@ -2,7 +2,11 @@ import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import ResumeUpload from "../components/resume/ResumeUpload";
 import { useState, useEffect } from "react";
-import { fetchResume, analyseResume } from "../services/resumeService";
+import {
+  fetchResume,
+  analyseResume,
+  deleteResume,
+} from "../services/resumeService";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
@@ -15,8 +19,13 @@ function Dashboard() {
 
   const loadResumes = async () => {
     try {
+      console.log("Fetching resumes...");
       const data = await fetchResume();
-      setResumes(data.resume);
+      setResumes(
+        [...data.resume].sort(
+          (a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at),
+        ),
+      );
     } catch (error) {
       console.error("Failed to load Resume", error);
     } finally {
@@ -30,6 +39,24 @@ function Dashboard() {
       navigate(`/analysis/${resumeId}`);
     } catch (error) {
       console.error("Failed to Analyse", error);
+    }
+  };
+
+  const handleDelete = async (resumeId) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this resume?",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteResume(resumeId);
+
+      setResumes((prevResumes) =>
+        prevResumes.filter((resume) => resume.id !== resumeId),
+      );
+    } catch (error) {
+      console.error("Failed to delete resume:", error);
     }
   };
 
@@ -78,12 +105,21 @@ function Dashboard() {
                     </p>
                   </div>
 
-                  <button
-                    onClick={() => handleAnalysis(resume.id)}
-                    className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium hover:bg-violet-500"
-                  >
-                    Analyze
-                  </button>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleAnalysis(resume.id)}
+                      className="rounded-xl bg-violet-600 px-4 py-2 font-semibold hover:bg-violet-500"
+                    >
+                      Analyze
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(resume.id)}
+                      className="rounded-xl border border-red-500/30 px-4 py-2 text-red-400 hover:bg-red-500/10"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
