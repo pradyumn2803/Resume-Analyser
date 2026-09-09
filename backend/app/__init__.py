@@ -2,6 +2,7 @@ from flask import Flask
 from app.extensions import db, jwt
 from app.config import Config
 from flask_cors import CORS
+from flask_migrate import Migrate
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +20,7 @@ def create_app():
 
     db.init_app(app)
     jwt.init_app(app)
+    Migrate(app,db)
 
     from app.routes.health import health_bp
     app.register_blueprint(health_bp)

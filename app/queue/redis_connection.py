@@ -1,9 +1,0 @@
-import redis
-from app.config import Config
-
-redis_connection = redis.Redis(
-    host=Config.REDIS_HOST,
-    port=Config.REDIS_PORT,
-    db=Config.REDIS_DB,
-    decode_responses=False
-)
