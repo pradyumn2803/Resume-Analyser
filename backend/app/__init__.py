@@ -9,7 +9,13 @@ def create_app():
     app.config.from_object(Config)
     CORS(
         app,
-        origins = [app.config.get("FRONTEND_URL")]
+        resources={
+            r"/*": {
+                "origins": [
+                    app.config.get("FRONTEND_URL")
+                ]
+            }
+        }
     )
 
     from app.logging_config import logging
