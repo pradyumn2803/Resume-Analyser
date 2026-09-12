@@ -41,7 +41,7 @@ Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous pro
 
 ### Project Structure
 
-
+```text
 backend/
 │
 ├── app/
@@ -57,6 +57,7 @@ backend/
 ├── run.py
 ├── requirements.txt
 └── .env
+```
 
 
 ### Directory Overview
