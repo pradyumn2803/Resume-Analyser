@@ -1,98 +1,236 @@
+Yes. Since you are deleting the separate `backend/README.md` and `frontend/README.md`, keep **one `README.md` in the repository root**.
 
-### AI Resume Analyzer - Backend
+Paste this into:
 
-Backend service for **ResuIQ**, an AI-powered resume analyzer that evaluates resumes and generates ATS scores, strengths, weaknesses, skill gaps, and personalized improvement recommendations.
+```text
+Resume-Analyser/README.md
+```
 
-Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous processing, JWT for authentication, and Google Gemini for AI-powered resume analysis.
+````markdown
+# ResuIQ - AI Resume Analyzer
 
----
+ResuIQ is a full-stack AI-powered resume analyzer that evaluates resumes and provides ATS scores, strengths, weaknesses, skill gaps, and personalized improvement recommendations.
 
-### Tech Stack
-
-- **Python**
-- **Flask**
-- **PostgreSQL**
-- **SQLAlchemy**
-- **Flask-Migrate**
-- **JWT Authentication**
-- **Redis**
-- **RQ (Redis Queue)**
-- **Google Gemini API**
-- **Gunicorn**
+The application uses a React-based frontend and Flask backend, with PostgreSQL for data persistence, Redis/RQ for asynchronous processing, and Google Gemini for AI-powered resume analysis.
 
 ---
 
 ## Features
 
-- User registration and authentication
+- User registration and login
 - JWT-based authentication
 - Resume upload and management
 - AI-powered resume analysis
 - ATS score generation
-- Strengths and weaknesses identification
-- Skill-gap analysis
+- Strengths and weaknesses analysis
+- Skill-gap identification
 - Personalized improvement recommendations
 - Asynchronous resume analysis using Redis and RQ
 - PostgreSQL database persistence
-- RESTful API architecture
-- Health-check endpoint
+- REST API architecture
+- Responsive React interface
+- Analysis status polling
+- Protected application routes
 
 ---
 
-### Project Structure
+## Tech Stack
+
+### Frontend
+
+- React.js
+- Vite
+- JavaScript
+- Tailwind CSS
+- Axios
+- React Router
+- Lucide React
+
+### Backend
+
+- Python
+- Flask
+- SQLAlchemy
+- Flask-Migrate
+- JWT Authentication
+- REST APIs
+- PostgreSQL
+- Redis
+- RQ (Redis Queue)
+- Google Gemini API
+- Gunicorn
+
+### DevOps & Deployment
+
+- Docker
+- Git
+- GitHub
+- Render
+- CI/CD
+
+---
+
+## Project Structure
 
 ```text
-backend/
+Resume-Analyser/
 │
-├── app/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── utils/
-│   ├── extensions.py
-│   └── __init__.py
+├── backend/
+│   ├── app/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── extensions.py
+│   │   └── __init__.py
+│   │
+│   ├── migrations/
+│   ├── requirements.txt
+│   └── run.py
 │
-├── migrations/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   ├── landing/
+│   │   │   └── layout/
+│   │   │
+│   │   ├── context/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── config/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   └── vite.config.js
 │
-├── run.py
-├── requirements.txt
-└── .env
-```
-
-
-### Directory Overview
-
-| Directory/File      | Description                             |
-| ------------------- | --------------------------------------- |
-| `app/models/`       | Database models                         |
-| `app/routes/`       | REST API routes                         |
-| `app/services/`     | Business logic and application services |
-| `app/utils/`        | Utility and helper functions            |
-| `app/extensions.py` | Flask extension initialization          |
-| `app/__init__.py`   | Flask application factory               |
-| `migrations/`       | Database migration files                |
-| `run.py`            | Application entry point                 |
-| `requirements.txt`  | Python dependencies                     |
-| `.env`              | Environment configuration               |
+└── README.md
+````
 
 ---
 
-# Local Setup
+# Application Architecture
+
+```text
+                         ┌────────────────────┐
+                         │   React Frontend   │
+                         │   Vite + Tailwind  │
+                         └──────────┬─────────┘
+                                    │
+                                    │ REST API
+                                    ▼
+                         ┌────────────────────┐
+                         │    Flask Backend   │
+                         │      REST APIs     │
+                         └──────┬─────┬───────┘
+                                │     │
+                 ┌──────────────┘     └──────────────┐
+                 │                                   │
+                 ▼                                   ▼
+        ┌─────────────────┐                 ┌─────────────────┐
+        │   PostgreSQL    │                 │  Redis / RQ     │
+        │    Database     │                 │ Background Jobs │
+        └─────────────────┘                 └────────┬────────┘
+                                                     │
+                                                     ▼
+                                            ┌─────────────────┐
+                                            │    RQ Worker    │
+                                            └────────┬────────┘
+                                                     │
+                                                     ▼
+                                            ┌─────────────────┐
+                                            │ Google Gemini   │
+                                            │      API        │
+                                            └─────────────────┘
+```
+
+---
+
+# Application Flow
+
+```text
+User
+ │
+ ▼
+React Frontend
+ │
+ ├── Register / Login
+ │
+ ▼
+JWT Authentication
+ │
+ ▼
+Dashboard
+ │
+ ├── Upload Resume
+ │
+ ▼
+Flask REST API
+ │
+ ├── Store Resume Metadata
+ │
+ └── Create Analysis Job
+            │
+            ▼
+          Redis
+            │
+            ▼
+        RQ Worker
+            │
+            ▼
+      Google Gemini API
+            │
+            ▼
+      Store Analysis
+            │
+            ▼
+        PostgreSQL
+            │
+            ▼
+      React Dashboard
+```
+
+---
+
+# Backend Setup
+
+## Prerequisites
+
+Make sure the following are installed:
+
+* Python 3.x
+* PostgreSQL
+* Redis
+* Git
+
+---
 
 ## 1. Clone the Repository
 
 ```bash
 git clone <YOUR_REPOSITORY_URL>
-cd Resume-Analyser/backend
+cd Resume-Analyser
 ```
 
-## 2. Create Virtual Environment
+---
+
+## 2. Navigate to Backend
+
+```bash
+cd backend
+```
+
+---
+
+## 3. Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
-
-## 3. Activate Virtual Environment
 
 ### Windows
 
@@ -106,6 +244,8 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
+---
+
 ## 4. Install Dependencies
 
 ```bash
@@ -114,7 +254,7 @@ pip install -r requirements.txt
 
 ---
 
-# Environment Configuration
+# Backend Environment Variables
 
 Create a `.env` file inside the `backend` directory.
 
@@ -138,40 +278,38 @@ REDIS_DB=0
 FRONTEND_URL=http://localhost:5173
 ```
 
-### Environment Variables
+### Environment Variable Description
 
-| Variable                   | Description                            |
-| -------------------------- | -------------------------------------- |
-| `DATABASE_URL`             | PostgreSQL database connection URL     |
-| `JWT_SECRET_KEY`           | Secret key used for JWT authentication |
-| `JWT_ACCESS_TOKEN_EXPIRES` | JWT access-token expiry configuration  |
-| `MAX_FILE_SIZE`            | Maximum allowed resume file size       |
-| `UPLOAD_FOLDER`            | Directory used for uploaded resumes    |
-| `PROMPT_FOLDER`            | Location of AI prompts                 |
-| `GEMINI_MODEL`             | Google Gemini model used for analysis  |
-| `GEMINI_API_KEY`           | Google Gemini API key                  |
-| `REDIS_HOST`               | Redis host                             |
-| `REDIS_PORT`               | Redis port                             |
-| `REDIS_DB`                 | Redis database number                  |
-| `FRONTEND_URL`             | Frontend application URL               |
+| Variable                   | Description                           |
+| -------------------------- | ------------------------------------- |
+| `DATABASE_URL`             | PostgreSQL database connection        |
+| `JWT_SECRET_KEY`           | Secret used for JWT authentication    |
+| `JWT_ACCESS_TOKEN_EXPIRES` | JWT access-token expiry configuration |
+| `MAX_FILE_SIZE`            | Maximum allowed uploaded file size    |
+| `UPLOAD_FOLDER`            | Resume upload directory               |
+| `PROMPT_FOLDER`            | AI prompt directory                   |
+| `GEMINI_MODEL`             | Gemini model used for analysis        |
+| `GEMINI_API_KEY`           | Google Gemini API key                 |
+| `REDIS_HOST`               | Redis host                            |
+| `REDIS_PORT`               | Redis port                            |
+| `REDIS_DB`                 | Redis database                        |
+| `FRONTEND_URL`             | Frontend URL                          |
 
-> **Important:** Never commit `.env` or expose your Gemini API key, database credentials, or JWT secret.
+> Never commit `.env` or expose API keys and secrets in source control.
 
 ---
 
 # Database Setup
 
-Make sure PostgreSQL is installed and running.
+Make sure PostgreSQL is running and the database specified in `DATABASE_URL` exists.
 
-Create the database specified in your `DATABASE_URL`.
-
-Run the existing database migrations:
+Apply existing migrations:
 
 ```bash
 flask db upgrade
 ```
 
-If you need to create a new migration after modifying the models:
+After modifying database models, create a migration:
 
 ```bash
 flask db migrate -m "your migration message"
@@ -187,9 +325,9 @@ flask db upgrade
 
 # Redis Setup
 
-Redis is required for asynchronous resume analysis using RQ.
+Redis is used for asynchronous resume analysis through RQ.
 
-Make sure Redis is running locally with:
+For local development, use:
 
 ```text
 Host: localhost
@@ -197,17 +335,19 @@ Port: 6379
 Database: 0
 ```
 
+Make sure Redis is running before starting the RQ worker.
+
 ---
 
 # Run the Backend
 
-Start the Flask application:
+From the `backend` directory:
 
 ```bash
 python run.py
 ```
 
-The backend will be available at:
+The backend runs on:
 
 ```text
 http://localhost:5000
@@ -217,29 +357,27 @@ http://localhost:5000
 
 # Run the RQ Worker
 
-Resume analysis is processed asynchronously using Redis Queue.
+Open another terminal and activate the backend virtual environment.
 
-From the `backend` directory, start the worker:
+From the `backend` directory:
 
 ```bash
 python -m app.queue.worker
 ```
 
-The worker consumes analysis jobs from Redis and processes resume analysis in the background.
+The worker processes resume-analysis jobs submitted through the backend.
 
 ---
 
-# API Endpoints
+# Backend API
 
 ## Health Check
-
-### Request
 
 ```http
 GET /health
 ```
 
-### Response
+Example response:
 
 ```json
 {
@@ -263,8 +401,6 @@ POST /auth/register
 POST /auth/login
 ```
 
-Authentication returns an access token that is used to access protected endpoints.
-
 ---
 
 ## Resume Management
@@ -276,8 +412,6 @@ GET /resume/<id>
 DELETE /resume/<id>
 ```
 
-These endpoints provide functionality for uploading, retrieving, and managing resumes.
-
 ---
 
 ## Resume Analysis
@@ -288,156 +422,246 @@ These endpoints provide functionality for uploading, retrieving, and managing re
 POST /resume/analysis/<id>
 ```
 
-Starts the AI-powered analysis process for the selected resume.
-
 ### Get Analysis
 
 ```http
 GET /resume/analysis/<id>
 ```
 
-Retrieves the analysis results and processing status.
-
 ---
 
-# Application Architecture
+# JWT Authentication
 
-The backend follows a layered architecture separating API routes, business logic, database operations, and background processing.
+The application uses JWT-based authentication.
 
-```text
-                         ┌─────────────────┐
-                         │     Frontend    │
-                         │ React + Vite    │
-                         └────────┬────────┘
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │   Flask REST    │
-                         │      API        │
-                         └────────┬────────┘
-                                  │
-                    ┌─────────────┼─────────────┐
-                    │             │             │
-                    ▼             ▼             ▼
-              ┌──────────┐ ┌───────────┐ ┌─────────────┐
-              │PostgreSQL│ │   Redis   │ │    Gemini   │
-              │ Database │ │    / RQ   │ │     API     │
-              └──────────┘ └─────┬─────┘ └─────────────┘
-                                 │
-                                 ▼
-                         ┌─────────────────┐
-                         │   RQ Worker     │
-                         │ Background Jobs │
-                         └─────────────────┘
-```
+After successful login, the backend returns an access token.
 
-### Request Flow
-
-```text
-Resume Upload
-      │
-      ▼
-Flask API
-      │
-      ├── Store resume metadata
-      │
-      └── Create analysis job
-                │
-                ▼
-             Redis
-                │
-                ▼
-            RQ Worker
-                │
-                ▼
-        Google Gemini API
-                │
-                ▼
-        Store analysis results
-                │
-                ▼
-           PostgreSQL
-                │
-                ▼
-             Frontend
-```
-
----
-
-# Authentication
-
-The backend uses **JWT-based authentication**.
-
-After successful login, the API returns an access token.
-
-Protected endpoints require the token in the request header:
+Protected API requests use:
 
 ```http
 Authorization: Bearer <access_token>
 ```
 
+The frontend manages the access token and attaches it to authenticated API requests.
+
 ---
 
 # AI Resume Analysis
 
-The application uses the **Google Gemini API** to analyze uploaded resumes.
+ResuIQ uses the Google Gemini API to analyze resume content.
 
-The analysis can provide:
+The analysis provides:
 
 * ATS score
 * Resume strengths
 * Resume weaknesses
-* Missing or relevant skills
+* Skill gaps
 * Personalized improvement recommendations
 
-The AI processing is handled asynchronously using **Redis and RQ**, allowing longer-running analysis tasks to be processed separately from the API request.
+AI-intensive processing is handled asynchronously through Redis and RQ.
+
+---
+
+# Frontend Setup
+
+Open a new terminal from the repository root.
+
+```bash
+cd frontend
+```
+
+---
+
+## Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+# Frontend Environment Variables
+
+Create a `.env` file inside the `frontend` directory:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+For the deployed backend:
+
+```env
+VITE_API_URL=https://resume-analyser-hpni.onrender.com
+```
+
+> Vite environment variables prefixed with `VITE_` are exposed to the browser. Do not store API keys or other secrets in frontend environment variables.
+
+---
+
+# Run the Frontend
+
+From the `frontend` directory:
+
+```bash
+npm run dev
+```
+
+The frontend will be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# Build the Frontend
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+The generated files will be available in:
+
+```text
+frontend/dist/
+```
+
+To preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+# Frontend Pages
+
+## Landing Page
+
+Introduces ResuIQ and provides access to authentication.
+
+## Register
+
+Allows new users to create an account.
+
+## Login
+
+Authenticates existing users using email and password.
+
+## Dashboard
+
+Authenticated users can:
+
+* Upload resumes
+* View resumes
+* Start resume analysis
+* View analysis status
+* Access analysis results
+
+## Analysis
+
+Displays the AI-generated resume analysis, including:
+
+* ATS score
+* Strengths
+* Weaknesses
+* Skill gaps
+* Recommendations
+
+---
+
+# Frontend Architecture
+
+The frontend is organized into reusable components and application layers.
+
+```text
+src/
+│
+├── components/     # Reusable UI components
+├── context/        # Application state and authentication
+├── pages/          # Application pages
+├── routes/         # Route configuration
+├── services/       # API services
+├── utils/          # Utility functions
+├── config/         # Application configuration
+├── App.jsx         # Root component
+└── main.jsx        # Application entry point
+```
 
 ---
 
 # Production
 
-The Flask application can be served using Gunicorn:
+The backend can be served using Gunicorn:
 
 ```bash
 gunicorn "app:create_app()"
 ```
 
-Production environments should provide environment-specific configuration for:
+The frontend can be built using:
+
+```bash
+npm run build
+```
+
+Production deployments should provide environment-specific configuration for:
 
 * PostgreSQL
 * Redis
 * Google Gemini API
 * JWT secret
 * Frontend URL
+* Backend API URL
 
 ---
 
-# Security Notes
+# Deployment
 
-* Store secrets in environment variables.
-* Never commit `.env` to source control.
-* Use a strong random value for `JWT_SECRET_KEY`.
-* Do not expose API keys in frontend code.
-* Configure CORS only for trusted frontend origins in production.
+The application can be deployed using separate services for the frontend and backend.
+
+### Backend
+
+The Flask backend can be deployed as a web service with:
+
+* PostgreSQL database
+* Redis-compatible key-value store
+* Environment variables
+* Gunicorn
+
+### Frontend
+
+The React frontend can be deployed as a static web application.
+
+Configure the frontend API URL using:
+
+```env
+VITE_API_URL=<DEPLOYED_BACKEND_URL>
+```
+
+---
+
+# Security
+
+* Keep secrets in environment variables.
+* Never commit `.env` files.
+* Never expose Gemini API keys in frontend code.
+* Use a strong random JWT secret.
 * Validate uploaded files before processing.
+* Configure CORS for trusted frontend origins in production.
 
 ---
 
-# Development
+# Future Improvements
 
-Run the application locally:
-
-```bash
-python run.py
-```
-
-Run the background worker separately:
-
-```bash
-python -m app.queue.worker
-```
-
-The frontend can then communicate with the backend through the REST API.
+* Resume-to-job-description matching
+* Job-specific resume optimization
+* Support for additional document formats
+* Improved analysis history and comparison
+* Additional AI models
+* Enhanced resume recommendations
+* Automated deployment pipelines
 
 ---
 
@@ -451,7 +675,28 @@ The frontend can then communicate with the backend through the REST API.
 
 This project is developed for learning and portfolio purposes.
 
-```
+````
 
-**One correction before you paste it:** if your actual worker module is not `app.queue.worker`, change that command to whatever module you currently use. Everything else above follows the backend structure and functionality you've described.
-```
+### Your final repository structure
+
+After deleting the two README files, you should have:
+
+```text
+Resume-Analyser/
+│
+├── README.md              ← keep this one
+│
+├── backend/
+│   ├── app/
+│   ├── migrations/
+│   ├── requirements.txt
+│   └── run.py
+│
+└── frontend/
+    ├── src/
+    ├── public/
+    ├── package.json
+    └── vite.config.js
+````
+
+**One thing to check before committing:** make sure `.env` is in `.gitignore` for both frontend and backend. Your README only contains placeholder credentials, which is safe to publish.
