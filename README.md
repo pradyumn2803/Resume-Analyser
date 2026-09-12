@@ -1,5 +1,5 @@
-````markdown
-# AI Resume Analyzer - Backend
+
+### AI Resume Analyzer - Backend
 
 Backend service for **ResuIQ**, an AI-powered resume analyzer that evaluates resumes and generates ATS scores, strengths, weaknesses, skill gaps, and personalized improvement recommendations.
 
@@ -7,7 +7,7 @@ Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous pro
 
 ---
 
-## Tech Stack
+### Tech Stack
 
 - **Python**
 - **Flask**
@@ -40,7 +40,7 @@ Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous pro
 
 ---
 
-## Project Structure
+### Project Structure
 
 ```text
 backend/
@@ -58,7 +58,7 @@ backend/
 ├── run.py
 ├── requirements.txt
 └── .env
-````
+
 
 ### Directory Overview
 
