@@ -56,13 +56,6 @@ The application uses a React-based frontend and Flask backend, with PostgreSQL f
 - Google Gemini API
 - Gunicorn
 
-### DevOps & Deployment
-
-- Docker
-- Git
-- GitHub
-- Render
-- CI/CD
 
 ---
 
