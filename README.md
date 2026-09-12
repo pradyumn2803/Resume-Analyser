@@ -19,7 +19,6 @@ Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous pro
 - **RQ (Redis Queue)**
 - **Google Gemini API**
 - **Gunicorn**
-- **Docker**
 
 ---
 
@@ -42,7 +41,7 @@ Built using Flask with PostgreSQL for persistence, Redis/RQ for asynchronous pro
 
 ### Project Structure
 
-```text
+
 backend/
 │
 ├── app/
