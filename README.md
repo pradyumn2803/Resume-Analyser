@@ -1,7 +1,3 @@
-Yes. Since you are deleting the separate `backend/README.md` and `frontend/README.md`, keep **one `README.md` in the repository root**.
-
-Paste this into:
-
 ```text
 Resume-Analyser/README.md
 ```
